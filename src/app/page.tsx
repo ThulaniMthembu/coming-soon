@@ -51,10 +51,10 @@ export default function Component() {
       <nav className="fixed top-0 left-0 right-0 z-30 bg-white bg-opacity-90 shadow-md">
         <div className="container mx-auto px-4 py-2 flex justify-between items-center">
           <div className="w-32 flex justify-start space-x-4">
-            <a href="#" className="text-gray-600 hover:text-pink-600 transition-colors" aria-label="Follow us on Instagram">
+            <a href="#" className="text-gray-600 hover:text-primary transition-colors" aria-label="Follow us on Instagram">
               <Instagram size={24} />
             </a>
-            <a href="#" className="text-gray-600 hover:text-pink-600 transition-colors" aria-label="Like us on Facebook">
+            <a href="#" className="text-gray-600 hover:text-primary transition-colors" aria-label="Like us on Facebook">
               <Facebook size={24} />
             </a>
           </div>
@@ -68,10 +68,10 @@ export default function Component() {
             />
           </div>
           <div className="w-32 flex justify-end space-x-4">
-            <a href="#" className="text-gray-600 hover:text-pink-600 transition-colors" aria-label="Follow us on Twitter">
+            <a href="#" className="text-gray-600 hover:text-primary transition-colors" aria-label="Follow us on Twitter">
               <Twitter size={24} />
             </a>
-            <a href="#" className="text-gray-600 hover:text-pink-600 transition-colors" aria-label="Subscribe to our YouTube channel">
+            <a href="#" className="text-gray-600 hover:text-primary transition-colors" aria-label="Subscribe to our YouTube channel">
               <Youtube size={24} />
             </a>
           </div>
@@ -81,7 +81,7 @@ export default function Component() {
       <div className="relative z-20 flex-grow flex flex-col justify-center items-center px-4 pt-20">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-3xl md:text-5xl font-bold mb-2 text-white">Unveiling a Secret</h1>
-          <p className="text-lg md:text-xl mb-4 text-pink-300">A year in the making, about to transform your confidence</p>
+          <p className="text-lg md:text-xl mb-4 text-primary">A year in the making, about to transform your confidence</p>
           <div className="bg-white bg-opacity-60 backdrop-blur-md rounded-lg p-6 mb-4 shadow-lg">
             <p className="text-sm md:text-base mb-4 text-gray-700">
               Imagine a brand that whispers to your inner goddess, awakens your confidence, and celebrates every curve. 
@@ -94,10 +94,10 @@ export default function Component() {
                 placeholder="Be the first to know"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-gray-100 text-gray-800 placeholder-gray-400 border-gray-300 focus:border-pink-500 focus:ring-pink-500"
+                className="bg-gray-100 text-gray-800 placeholder-gray-400 border-gray-300 focus:border-primary focus:ring-primary"
                 required
               />
-              <Button type="submit" className="bg-pink-600 hover:bg-pink-700 text-white">
+              <Button type="submit" className="bg-primary hover:bg-primary/90 text-white">
                 Join the Movement
               </Button>
             </form>

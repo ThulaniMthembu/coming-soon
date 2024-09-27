@@ -4,6 +4,8 @@
     "clsx",
     "lucide",
     "madein",
-    "signup"
+    "signup",
+    "tailwindcss",
+    "unoptimized"
   ]
 }
