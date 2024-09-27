@@ -1,15 +1,18 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Instagram, Facebook, Twitter, Youtube } from 'lucide-react'
+import { Instagram, Facebook, Twitter, Youtube, Volume2, VolumeX, Play, Pause } from 'lucide-react'
 import Image from 'next/image'
 import toast from 'react-hot-toast'
 
 export default function Component() {
   const [email, setEmail] = useState('')
   const [teaser, setTeaser] = useState('')
+  const [isMuted, setIsMuted] = useState(true)
+  const [isPlaying, setIsPlaying] = useState(true)
+  const videoRef = useRef<HTMLVideoElement>(null)
 
   const teasers = useMemo(() => [
     "Embrace your curves",
@@ -71,9 +74,29 @@ export default function Component() {
     setEmail('')
   }
 
+  const toggleAudio = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted
+      setIsMuted(videoRef.current.muted)
+    }
+  }
+
+  const togglePlayPause = () => {
+    if (videoRef.current) {
+      if (videoRef.current.paused) {
+        videoRef.current.play()
+        setIsPlaying(true)
+      } else {
+        videoRef.current.pause()
+        setIsPlaying(false)
+      }
+    }
+  }
+
   return (
     <div className="relative h-screen flex flex-col overflow-hidden">
       <video 
+        ref={videoRef}
         autoPlay 
         loop 
         muted 
@@ -146,6 +169,31 @@ export default function Component() {
           </div>
           <p className="mt-2 text-xs text-gray-300 font-semibold">#Amare #selflove #swimwear #madeinSA</p>
         </div>
+      </div>
+
+      <div className="absolute bottom-4 right-4 z-30 flex space-x-2">
+        <button
+          onClick={togglePlayPause}
+          className="bg-white bg-opacity-50 hover:bg-opacity-75 text-gray-800 p-2 rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary"
+          aria-label={isPlaying ? "Pause video" : "Play video"}
+        >
+          {isPlaying ? (
+            <Pause size={18} className="text-gray-800" />
+          ) : (
+            <Play size={18} className="text-gray-800" />
+          )}
+        </button>
+        <button
+          onClick={toggleAudio}
+          className="bg-white bg-opacity-50 hover:bg-opacity-75 text-gray-800 p-2 rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary"
+          aria-label={isMuted ? "Unmute video" : "Mute video"}
+        >
+          {isMuted ? (
+            <VolumeX size={18} className="text-gray-800" />
+          ) : (
+            <Volume2 size={18} className="text-gray-800" />
+          )}
+        </button>
       </div>
     </div>
   )
