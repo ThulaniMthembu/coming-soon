@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Instagram, Facebook, Twitter, Youtube, Volume2, VolumeX, Play, Pause } from 'lucide-react'
+import { Instagram, Facebook, Twitter, Youtube, Volume2, VolumeX, Play, Pause, ChevronUp, ChevronDown } from 'lucide-react'
 import Image from 'next/image'
 import toast from 'react-hot-toast'
 import { Loader } from '@/components/ui/Loader'
@@ -15,6 +15,8 @@ export default function Component() {
   const [isMuted, setIsMuted] = useState(true)
   const [isPlaying, setIsPlaying] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
+  const [isContentVisible, setIsContentVisible] = useState(true)
+  const [canToggleContent, setCanToggleContent] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
 
   const teasers = useMemo(() => [
@@ -31,13 +33,20 @@ export default function Component() {
     }, 5000) // Change teaser every 5 seconds
 
     // Simulate loading time
-    const timer = setTimeout(() => {
+    const loadingTimer = setTimeout(() => {
       setIsLoading(false)
     }, 5000)
 
+    // Hide content after 3 seconds
+    const hideContentTimer = setTimeout(() => {
+      setIsContentVisible(false)
+      setCanToggleContent(true)
+    }, 8000)
+
     return () => {
       clearInterval(changeTeaserInterval)
-      clearTimeout(timer)
+      clearTimeout(loadingTimer)
+      clearTimeout(hideContentTimer)
     }
   }, [teasers])
 
@@ -104,6 +113,12 @@ export default function Component() {
     }
   }
 
+  const toggleContent = () => {
+    if (canToggleContent) {
+      setIsContentVisible(!isContentVisible)
+    }
+  }
+
   return (
     <>
       <AnimatePresence>
@@ -121,7 +136,7 @@ export default function Component() {
           loop 
           muted 
           playsInline
-          className="absolute top-0 left-0 w-full h-full object-cover z-0 filter grayscale opacity-50"
+          className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-50"
         >
           <source src="/background/bg.mp4" type="video/mp4" />
           Your browser does not support the video tag.
@@ -171,33 +186,64 @@ export default function Component() {
           className="relative z-20 flex-grow flex flex-col justify-center items-center px-4 pt-20"
         >
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-3xl md:text-5xl font-bold mb-2 text-white">Unveiling a Secret</h1>
-            <p className="text-lg md:text-xl mb-4 text-primary">A year in the making, about to transform your confidence</p>
-            <div className="bg-white bg-opacity-60 backdrop-blur-md rounded-lg p-6 mb-4 shadow-lg">
-              <p className="text-sm md:text-base mb-4 text-gray-700">
-                Imagine a brand that whispers to your inner goddess, awakens your confidence, and celebrates every curve. 
-                Born from cherished memories and a passion for self-love, this isn&apos;t just swimwear - it&apos;s a revolution in fabric form.
-                Are you ready to rediscover your radiance?
-              </p>
-              <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-2 justify-center">
-                <Input
-                  type="email"
-                  placeholder="Be the first to know"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="bg-gray-100 text-gray-800 placeholder-gray-400 border-gray-300 focus:border-primary focus:ring-primary"
-                  required
-                />
-                <Button type="submit" className="bg-primary hover:bg-primary/90 text-white">
-                  Join the Movement
-                </Button>
-              </form>
-            </div>
-            <div className="mt-4 text-white">
-              <p className="text-xl font-bold mb-1">Stay Tuned</p>
-              <p className="text-lg italic">{teaser}</p>
-            </div>
-            <p className="mt-2 text-xs text-gray-300 font-semibold">#Amare #selflove #swimwear #madeinSA</p>
+            <AnimatePresence>
+              {isContentVisible && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-2 text-white">Unveiling a Secret</h1>
+                  <p className="text-base md:text-lg lg:text-xl mb-4 text-primary">A year in the making, about to transform your confidence</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+            <AnimatePresence>
+              {isContentVisible && (
+                <motion.div
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 50 }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-white bg-opacity-60 backdrop-blur-md rounded-lg p-4 md:p-6 mb-4 shadow-lg"
+                >
+                  <p className="text-xs md:text-sm lg:text-base mb-4 text-gray-700">
+                    Imagine a brand that whispers to your inner goddess, awakens your confidence, and celebrates every curve. 
+                    Born from cherished memories and a passion for self-love, this isn&apos;t just swimwear - it&apos;s a revolution in fabric form.
+                    Are you ready to rediscover your radiance?
+                  </p>
+                  <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-2 justify-center">
+                    <Input
+                      type="email"
+                      placeholder="Be the first to know"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="bg-gray-100 text-gray-800 placeholder-gray-400 border-gray-300 focus:border-primary focus:ring-primary text-xs md:text-sm"
+                      required
+                    />
+                    <Button type="submit" className="bg-primary hover:bg-primary/90 text-white text-xs md:text-sm">
+                      Join the Movement
+                    </Button>
+                  </form>
+                </motion.div>
+              )}
+            </AnimatePresence>
+            <AnimatePresence>
+              {isContentVisible && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  transition={{ duration: 0.3 }}
+                  className="mt-4 text-white"
+                >
+                  <p className="text-base md:text-lg lg:text-xl font-bold mb-1">Stay Tuned</p>
+                  <p className="text-sm md:text-base lg:text-lg italic">{teaser}</p>
+                  <p className="mt-2 text-xs text-gray-300 font-semibold">#Amare #selflove #swimwear #madeinSA</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </motion.div>
 
@@ -229,6 +275,39 @@ export default function Component() {
               <Volume2 size={24} className="text-gray-800" />
             )}
           </button>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 5.6 }}
+          className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-30"
+        >
+          <motion.button
+            onClick={toggleContent}
+            className={`bg-white bg-opacity-50 hover:bg-opacity-75 text-gray-800 p-2 rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary ${!canToggleContent && 'opacity-0'}`}
+            aria-label={isContentVisible ? "Hide content" : "Show content"}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <motion.div
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [1, 0.8, 1],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                repeatType: "reverse",
+              }}
+            >
+              {isContentVisible ? (
+                <ChevronDown size={24} className="text-gray-800" />
+              ) : (
+                <ChevronUp size={24} className="text-gray-800" />
+              )}
+            </motion.div>
+          </motion.button>
         </motion.div>
       </motion.div>
     </>
